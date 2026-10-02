@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: grantai-engine
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SERPAPI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+    healthCheckPath: /
+    autoDeploy: false
