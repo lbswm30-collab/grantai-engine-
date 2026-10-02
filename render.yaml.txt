@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: grantai-engine
+    env: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SERPAPI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+    healthCheckPath: /
+    autoDeploy: false
+  - type: cron
+    name: grantai-daily-p1
+    env: docker
+    schedule: "0 6 * * *"
+    dockerCommand: "python grantai_runner_v5_hardened.py --priority P1 && python grantai_report_v2.py"
+    envVars:
+      - key: SERPAPI_API_KEY
+        sync: false

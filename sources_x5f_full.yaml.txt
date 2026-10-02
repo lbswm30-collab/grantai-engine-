@@ -1,0 +1,447 @@
+# GrantAI - sources_full.yaml V3 - 46 מקורות
+# נוצר: 2026-10-01
+# לוגיקה: P1=יומי 06:00-08:00, P2=כל יומיים, P3=שבועי
+# Extractor: V2 עם evidence_score, מינימום 0.6 לאישור
+
+global:
+  version: 3.0
+  headers:
+    User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) GrantAI-Bot/3.0"
+    Accept-Language: "he-IL,he;q=0.9,en;q=0.8,ar;q=0.7"
+  cache_ttl_hours: 12
+  concurrency: 2
+  retry: 2
+  extractor: "V2_with_evidence_score"
+  min_score_to_approve: 0.6
+  pdf_parser: true
+  dedup:
+    method: "normalized_title + publisher + deadline"
+    auto_merge: true
+
+# ==========================================
+# P1 - חובה יומי - 10 מקורות - 06:00-08:00
+# ==========================================
+sources:
+
+  - id: minhelet_tkuma
+    name: "מנהלת תקומה"
+    priority: P1
+    type: headless_gov
+    schedule: "daily 06:00"
+    entry_urls:
+      - https://www.gov.il/he/departments/tkuma/gov-lists/calls-for-grants
+      - https://www.gov.il/he/search?query=תקומה+קול+קורא
+    wait_for_network: ["**/Api/**CallsForGrants**", "**/DynamicCollectors**"]
+    wait_for_selector: ".search-results, .call-for-grants-item"
+    keywords: ["חוסן קהילתי", "הפעלה", "עוטף", "מבחן תמיכה"]
+    relevance: "עמותות חברתיות, חוסן, הפעלה"
+
+  - id: ministry_of_education
+    name: "משרד החינוך - חברה ונוער, פדגוגי"
+    priority: P1
+    type: gov_sitemap
+    schedule: "daily 06:10"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_education/gov-lists/kolot-kore
+      - https://www.gov.il/he/Departments/DynamicCollectors/calls-for-grants?OfficeId=4ada6b7c&q=נוער
+    keywords: ["מפעילים", "תנועות נוער", "רשויות", "חברה ונוער", "מנהל פדגוגי"]
+
+  - id: keren_shalem
+    name: "קרן שלם"
+    priority: P1
+    type: headless_wp
+    schedule: "daily 06:20"
+    entry_urls:
+      - https://www.kshalem.org.il/kol-kore/
+    discovery:
+      selector: 'a[href*="kol-kore"]'
+      collect_all_inner_links: true
+    extract:
+      closed_keywords: ["נסגרה ההרשמה", "הסתיים", "סגור"]
+    notes: "לסרוק כל דף פנימי - 3 עמודים לא מספיק"
+
+  - id: ministry_of_housing
+    name: "משרד הבינוי והשיכון"
+    priority: P1
+    type: headless_gov
+    schedule: "daily 06:30"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_construction_and_housing/gov-lists/kolot-kore
+      - https://www.gov.il/he/search?query=קול+קורא+92-2026+שטחים+ציבוריים
+    keywords: ["שטחים ציבוריים", "התחדשות עירונית", "92-2026", "1/2026", "רשויות ערביות"]
+
+  - id: welfare_ministry
+    name: "משרד הרווחה והביטחון החברתי"
+    priority: P1
+    type: headless_gov
+    schedule: "daily 06:40"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_welfare_and_social_affairs/gov-lists/kolot-kore
+    keywords: ["מפעילים", "עמותות", "מוגבלויות", "קשישים", "נוער בסיכון", "חוץ ביתי"]
+
+  - id: bituach_leumi_funds
+    name: "ביטוח לאומי - קרנות"
+    priority: P1
+    type: headless_wp
+    schedule: "daily 06:50"
+    entry_urls:
+      - https://www.btl.gov.il/funds/
+      - https://www.btl.gov.il/Funds/KOL_KORE/Pages/default.aspx
+    keywords: ["קרן סיעוד", "קרן מנוף", "מפעלים מיוחדים", "קרן ילדים"]
+    notes: "מקור זהב - 4 קרנות שמחלקות מיליונים לעמותות"
+
+  - id: mifal_hapais
+    name: "מפעל הפיס"
+    priority: P1
+    type: headless_wp
+    schedule: "daily 07:00"
+    entry_urls:
+      - https://www.pais.co.il/about-us/grants/
+      - https://www.pais.co.il/קולות-קוראים/
+    keywords: ["רשויות", "תרבות", "קהילה", "מלגות"]
+
+  - id: culture_sport_ministry
+    name: "משרד התרבות והספורט"
+    priority: P1
+    type: gov_sitemap
+    schedule: "daily 07:10"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_culture_and_sport/gov-lists/kolot-kore
+    keywords: ["תרבות", "ספורט", "מוסדות ציבור"]
+
+  - id: health_ministry
+    name: "משרד הבריאות"
+    priority: P1
+    type: headless_gov
+    schedule: "daily 07:20"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_health/gov-lists/kolot-kore
+    keywords: ["קידום בריאות", "עמותות בריאות", "מניעה", "התמכרויות"]
+
+  - id: ministry_of_labor
+    name: "משרד העבודה"
+    priority: P1
+    type: gov_sitemap
+    schedule: "daily 07:30"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_labor/gov-lists/kolot-kore
+    keywords: ["תעסוקה", "הכשרות", "עמותות תעסוקה", "שילוב"]
+
+# ==========================================
+# P2 - חשוב כל יומיים - 20 מקורות
+# ==========================================
+
+  - id: negev_development
+    name: "הרשות לפיתוח הנגב"
+    priority: P2
+    type: headless_gov
+    schedule: "every 2 days 06:00"
+    entry_urls:
+      - https://www.gov.il/he/departments/negev-development-authority/gov-lists/kolot-kore
+
+  - id: negev_galilee_ministry
+    name: "משרד הנגב הגליל והחוסן הלאומי"
+    priority: P2
+    type: headless_gov
+    schedule: "every 2 days 06:10"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry-for-the-development-of-the-negev-and-galilee/gov-lists/kolot-kore
+
+  - id: innovation_authority
+    name: "רשות החדשנות"
+    priority: P2
+    type: headless
+    schedule: "every 2 days 06:20"
+    entry_urls:
+      - https://innovationisrael.org.il/callsforproposal
+    wait_for_selector: "div.call-item"
+    action: ["scroll 3", "click text=טען עוד"]
+
+  - id: ministry_of_energy
+    name: "משרד האנרגיה והתשתיות"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 06:30"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_energy/gov-lists/kolot-kore
+    keywords: ["התייעלות", "רשויות", "קהילה"]
+
+  - id: environmental_ministry
+    name: "המשרד להגנת הסביבה"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 06:40"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_environmental_protection/gov-lists/kolot-kore
+    keywords: ["קיימות", "חינוך סביבתי", "קהילה"]
+
+  - id: aliyah_integration
+    name: "משרד העלייה והקליטה"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 06:50"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_aliyah_and_integration/gov-lists/kolot-kore
+    keywords: ["עולים", "קליטה", "מעטפת"]
+
+  - id: equality_ministry
+    name: "המשרד לשוויון חברתי"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 07:00"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_for_social_equality/gov-lists/kolot-kore
+    keywords: ["אזרחים ותיקים", "צעירים", "מגזר ערבי"]
+
+  - id: religious_services
+    name: "המשרד לשירותי דת"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 07:10"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_religious_services/gov-lists/kolot-kore
+
+  - id: ministry_of_agriculture
+    name: "משרד החקלאות ופיתוח הכפר"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 07:20"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_agriculture_and_rural_development/gov-lists/kolot-kore
+    keywords: ["חקלאות קהילתית", "כפר", "התיישבות"]
+
+  - id: science_tech_ministry
+    name: "משרד החדשנות המדע והטכנולוגיה"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 07:30"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_science_and_technology/gov-lists/kolot-kore
+
+  - id: diaspora_ministry
+    name: "משרד התפוצות והמאבק באנטישמיות"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 07:40"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_diaspora_affairs/gov-lists/kolot-kore
+
+  - id: ministry_of_interior
+    name: "משרד הפנים"
+    priority: P2
+    type: gov_sitemap
+    schedule: "every 2 days 07:50"
+    entry_urls:
+      - https://www.gov.il/he/departments/ministry_of_interior/gov-lists/kolot-kore
+
+  - id: kkl
+    name: "קק״ל"
+    priority: P2
+    type: headless_wp
+    schedule: "every 2 days 08:00"
+    entry_urls:
+      - https://www.kkl.org.il/calls-for-proposals/
+
+  - id: rashi_foundation
+    name: "קרן רש״י"
+    priority: P2
+    type: headless_wp
+    schedule: "every 2 days 08:10"
+    entry_urls:
+      - https://www.rashi.org.il/מה-אנחנו-עושים/קולות-קוראים/
+
+  - id: yad_hanadiv
+    name: "יד הנדיב"
+    priority: P2
+    type: headless_wp
+    schedule: "every 2 days 08:20"
+    entry_urls:
+      - https://www.yadhanadiv.org.il/funding-opportunities
+
+  - id: azrieli_foundation
+    name: "קרן עזריאלי"
+    priority: P2
+    type: headless_wp
+    schedule: "every 2 days 08:30"
+    entry_urls:
+      - https://azrielifoundation.org/he/grants/
+
+  - id: shusterman_israel
+    name: "קרן שוסטרמן ישראל"
+    priority: P2
+    type: open_search
+    schedule: "every 2 days"
+    search_queries: ["קרן שוסטרמן קול קורא", "Schusterman Israel grants"]
+
+  - id: van_leer
+    name: "קרן ון ליר ירושלים"
+    priority: P2
+    type: headless_wp
+    schedule: "every 2 days"
+    entry_urls:
+      - https://www.vanleer.org.il/grants/
+
+  - id: eu_israel
+    name: "האיחוד האירופי - משלחת בישראל"
+    priority: P2
+    type: headless
+    schedule: "every 2 days"
+    entry_urls:
+      - https://www.eeas.europa.eu/delegation-israel/funding-opportunities
+    languages: ["en"]
+    keywords: ["civil society", "human rights", "coexistence"]
+
+  - id: us_embassy_israel
+    name: "שגרירות ארה״ב בישראל"
+    priority: P2
+    type: headless_gov
+    schedule: "every 2 days"
+    entry_urls:
+      - https://il.usembassy.gov/education-culture/grants/
+      - https://il.usembassy.gov/he/grants-he/
+
+# ==========================================
+# P3 - משלים שבועי - 16 מקורות
+# ==========================================
+
+  - id: kupot_holim
+    name: "קופות החולים בשיתוף רשויות"
+    priority: P3
+    type: open_search
+    schedule: "weekly Monday"
+    search_queries:
+      - "קול קורא קופת חולים רשות מקומית"
+      - "כללית מכבי מאוחדת קול קורא קהילה"
+
+  - id: jewish_agency
+    name: "הסוכנות היהודית"
+    priority: P3
+    type: headless_wp
+    schedule: "weekly Monday"
+    entry_urls:
+      - https://www.jewishagency.org/he/grants/
+    expected_result: "low - בעיקר סיוע ישיר"
+
+  - id: ted_arison
+    name: "קרן טד אריסון"
+    priority: P3
+    type: headless_wp
+    schedule: "weekly Tuesday"
+    entry_urls:
+      - https://www.arison.co.il/קולות-קוראים/
+
+  - id: gandyr_foundation
+    name: "קרן גנדיר"
+    priority: P3
+    type: open_search
+    schedule: "weekly Tuesday"
+    search_queries: ["קרן גנדיר קול קורא"]
+
+  - id: bracha_foundation
+    name: "קרן ברכה"
+    priority: P3
+    type: open_search
+    schedule: "weekly Tuesday"
+    search_queries: ["קרן ברכה מענקים"]
+
+  - id: lautman_foundation
+    name: "קרן לאוטמן"
+    priority: P3
+    type: open_search
+    schedule: "weekly Wednesday"
+    search_queries: ["קרן לאוטמן מענק"]
+
+  - id: shahaf_foundation
+    name: "קרן שח״ף"
+    priority: P3
+    type: open_search
+    schedule: "weekly Wednesday"
+    search_queries: ["קרן שחף מענקים לעמותות"]
+
+  - id: safra_foundation
+    name: "קרן ספרא"
+    priority: P3
+    type: open_search
+    schedule: "weekly Wednesday"
+    search_queries: ["קרן ספרא קול קורא"]
+
+  - id: local_authorities
+    name: "מועצות מקומיות ותאגידים עירוניים"
+    priority: P3
+    type: open_search
+    schedule: "weekly Thursday"
+    strategy: "Google Alerts - אל תסרוק 250 אתרים"
+    search_queries:
+      - "site:muni.il קול קורא עמותות"
+      - "תמיכות עמותות מועצה אזורית 2026"
+
+  - id: israel_gives_intl
+    name: "Israel Gives ופלטפורמות בינלאומיות"
+    priority: P3
+    type: api
+    schedule: "weekly Thursday"
+    entry_urls:
+      - https://www.israelgives.org/calls
+
+  - id: german_embassy
+    name: "שגרירות גרמניה וקרנות גרמניות"
+    priority: P3
+    type: open_search
+    schedule: "weekly Friday"
+    search_queries:
+      - "German Embassy Israel small grants"
+      - "Heinrich Boll Israel call"
+      - "Friedrich Ebert Israel grants"
+
+  - id: ford_open_society
+    name: "Ford, Open Society, NIF"
+    priority: P3
+    type: open_search
+    schedule: "weekly Friday"
+    search_queries:
+      - "Ford Foundation Israel open call"
+      - "New Israel Fund grants 2026"
+
+  - id: jfna_federations
+    name: "פדרציות יהודיות ו-Jewish Funds"
+    priority: P3
+    type: open_search
+    schedule: "weekly Friday"
+    search_queries:
+      - "Jewish Federation grant Israel NGOs"
+      - "Natan Fund grants"
+      - "Mandel Foundation Israel"
+
+  - id: csr_israel
+    name: "אחריות תאגידית - בנקים, הייטק"
+    priority: P3
+    type: open_search
+    schedule: "weekly Friday"
+    search_queries:
+      - "קול קורא אחריות תאגידית 2026"
+      - "בנק הפועלים מענק קהילה"
+      - "גוגל ישראל מענקים לעמותות"
+
+  - id: open_multilingual
+    name: "חיפוש פתוח רב לשוני - קרנות קהילתיות ושגרירויות"
+    priority: P3
+    type: open_search
+    schedule: "weekly"
+    languages: ["he", "ar", "en"]
+    search_queries:
+      - "מענקים לעמותות קול קורא 2026"
+      - "grants for NGOs Israel open call"
+      - "منح للجمعيات إسرائيل"
+      - "שגרירות ארהב מענקים קהילה"
+      - "פדרציה יהודית קול קורא"
+
+  - id: mr_gov_il
+    name: "מנהל הרכש הממשלתי mr.gov.il"
+    priority: P3_LOW
+    type: api_gov
+    schedule: "weekly Sunday"
+    entry_urls:
+      - https://mr.gov.il
+    filter: "רק מכרזים פומביים עם מילות הפעלה / שירותים חברתיים"
+    category: "מכרזי ספקים - לא תמיכות"
+    notes: "להוציא מהדאשבורד הראשי - זה מטעה למנהלי עמותות"
